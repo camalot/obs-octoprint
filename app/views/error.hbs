@@ -1,0 +1,25 @@
+<div class="mdl-grid">
+	<div class="mdl-cell mdl-cell--3-col"></div>
+	<div class="mdl-cell mdl-cell--6-col mdl-grid mdl-grid--no-spacing">
+		<div class="mdl-card mdl-shadow--2dp mdl-cell--12-col ">
+			<div class="mdl-card__title mdl-card--expand mdl-color--red-400 mdl-color-text--white">
+				<i class="material-icons">warning</i>
+				<h4 class="mdl-card__title-text">{{#if error.status}}{{error.status}}{{else}}ERROR{{/if}}</h4>
+			</div>
+			<div class="mdl-card__supporting-text center-text mdl-color-text--red-400">
+				<i class="material-icons big-text">warning</i>
+			</div>
+			<div class="mdl-card__supporting-text center-text">
+				<h4 class="">{{message}}</h4>
+			</div>
+			{{#if error.stack}}
+			<div class="mdl-card__supporting-text">
+				<h4 class="">
+					<pre>{{error.stack}}</pre>
+				</h4>
+			</div>
+			{{/if}}
+		</div>
+	</div>
+</div>
+<div class="mdl-cell mdl-cell--3-col"></div>

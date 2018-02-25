@@ -1,0 +1,224 @@
+{{#section 'head'}} {{/section}}
+
+<dialog class="mdl-dialog mdl-dialog-wide" id="delete-category">
+	<form method="post" action="/categories/delete">
+		<h4 class="mdl-dialog__title">DELETE CATEGORY?</h4>
+		<div class="mdl-dialog__content">
+			<div class="mdl-card__content mdl-card--border">
+				<div>Are you sure you want to delete <code data-label="category" style="font-weight: bold;">CATEGORY ID</code>?</div>
+				<div class="">Type <code data-label="category" style="font-weight: bold;">CATEGORY ID</code> to delete.</div>
+				<div class="mdl-textfield mdl-js-textfield">
+					<input class="mdl-textfield__input" type="text" data-field="category" id="delete_category" name="category_validate" pattern="" required="required">
+					<label class="mdl-textfield__label" for="delete_category">Category Name</label>
+					<span class="mdl-textfield__error">You must enter <code data-label="category" style="font-weight: bold;">CATEGORY ID</code> to delete this category.</span>
+				</div>
+				<div class="">Choose Category to move sound clips to:</div>
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+					<select class="mdl-textfield__input" id="move_category" name="move_category" value="" required="required">
+						<option value=""></option>
+						{{#each data}}
+						<option value="{{@key}}">{{name}}</option>
+						{{/each}}
+					</select>
+					<label class="mdl-textfield__label" for="move_category">Category</label>
+				</div>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button class="mdl-button mdl-js-button mdl-js-ripple-effect close mdl-button--accent" type="reset">Cancel</button>
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color--red-500" type="submit">Yes, Delete</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog class="mdl-dialog mdl-dialog-wide" id="delete-sound">
+	<form method="post" action="/sounds/delete">
+		<h4 class="mdl-dialog__title">DELETE CLIP?</h4>
+		<div class="mdl-dialog__content">
+			<div class="mdl-card__content mdl-card--border">
+				<div>Are you sure you want to delete
+					<code data-label="sound" style="font-weight: bold;">SOUND ID</code>?</div>
+				<div class="">Type
+					<code data-label="sound" style="font-weight: bold;">SOUND ID</code> to delete.</div>
+				<div class="mdl-textfield mdl-js-textfield">
+					<input class="mdl-textfield__input" type="text" name="clip_id" data-field="sound" id="delete_sound" pattern="" required="required">
+					<label class="mdl-textfield__label" for="delete_sound">Clip Name</label>
+					<span class="mdl-textfield__error">You must enter
+						<code data-label="sound" style="font-weight: bold;">SOUND ID</code> to delete this clip.</span>
+				</div>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button class="mdl-button mdl-js-button mdl-js-ripple-effect close mdl-button--accent" type="reset">Cancel</button>
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color--red-500" type="submit">Yes, Delete</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog class="mdl-dialog mdl-dialog-wide" id="new-sound-dialog">
+	<form method="post" action="/sounds">
+		<h4 class="mdl-dialog__title">ADD NEW SOUND CLIP</h4>
+		<div class="mdl-dialog__content">
+			<div class="mdl-card__content mdl-card--border">
+				<div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" type="text" id="sound_id" name="id" value="" required="required" />
+						<label class="mdl-textfield__label" for="sound_id">Name</label>
+					</div>
+				</div>
+				<div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<select class="mdl-textfield__input" id="sound_category" name="category" value="" required="required">
+							<option value=""></option>
+							{{#each data}}
+							<option value="{{@key}}">{{name}}</option>
+							{{/each}}
+						</select>
+						<label class="mdl-textfield__label" for="sound_category">Category</label>
+					</div>
+					{{!-- <div style="float: right;">
+						<a href="/categories" class="mdl-button mdl-js-button mdl-button--primary">Manage Categories</a>
+					</div> --}}
+				</div>
+
+				<div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" type="text" id="sound_url" name="url" value="" required="required" />
+						<label class="mdl-textfield__label" for="sound_url">Video URL</label>
+					</div>
+				</div>
+				<div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" id="sound_start" type="number" min="0" name="start" value="0" required="required" />
+						<label class="mdl-textfield__label" for="sound_start">Start (Seconds)</label>
+					</div>
+				</div>
+				<div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" id="sound_end" name="end" type="number" min="-1" value="-1" required="required" />
+						<label class="mdl-textfield__label" for="sound_end">End (Seconds)</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" type="submit">Save</button>
+			<button class="mdl-button mdl-js-button mdl-js-ripple-effect close mdl-button--accent" type="reset">Close</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog class="mdl-dialog mdl-dialog-wide" id="new-category-dialog">
+	<form method="post" action="/categories">
+		<h4 class="mdl-dialog__title">ADD NEW CATEGORY</h4>
+		<div class="mdl-dialog__content">
+			<div class="mdl-card__content mdl-card--border">
+				<div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" type="text" id="category_name" name="name" value="" required="required" />
+						<label class="mdl-textfield__label" for="category_name">Name</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" type="submit">Save</button>
+			<button class="mdl-button mdl-js-button mdl-js-ripple-effect close mdl-button--accent" type="reset">Close</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog class="mdl-dialog mdl-dialog-wide" id="new-category-dialog">
+	<form method="post" action="/categories">
+		<h4 class="mdl-dialog__title">CONFIRM DELETE</h4>
+		<div class="mdl-dialog__content">
+			<div class="mdl-card__content mdl-card--border">
+				<div>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" type="text" id="category_name" name="name" value="" required="required" />
+						<label class="mdl-textfield__label" for="category_name">Name</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" type="submit">Save</button>
+			<button class="mdl-button mdl-js-button mdl-js-ripple-effect close mdl-button--accent" type="reset">Close</button>
+		</div>
+	</form>
+</dialog>
+
+{{#if data}}
+<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+	<div class="mdl-tabs__tab-bar">
+		{{#each data}}
+		<a href="#{{@key}}" title="{{name}}" class="mdl-tabs__tab">{{name}}</a>
+		<button title="delete" data-delete-category="{{@key}}" style="margin-top:10px;" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red-500 mdl-button--icon mdl-button--mini-fab">
+			<i class="material-icons">delete</i>
+		</button>
+		{{/each}}
+		<button title="new" class="tab-add mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary mdl-button--icon mdl-button--mini-fab"
+		 data-dialog="#new-category-dialog">
+			<i class="material-icons">add</i>
+		</button>
+
+	</div>
+	{{#each data}}
+	<div class="mdl-tabs__panel" id="{{@key}}">
+		<table class="wide-mdl-data-table mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+			<thead>
+				<tr>
+					<th class="mdl-data-table__cell--non-numeric" width="70"></th>
+					<th class="mdl-data-table__cell--non-numeric">NAME</th>
+					<th class="mdl-data-table__cell--non-numeric">VIDEO ID</th>
+					<th class="mdl-data-table__cell">START</th>
+					<th class="mdl-data-table__cell">END</th>
+					<th class="mdl-data-table__cell--non-numeric" width="70"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each items}}
+				<tr>
+					<td class="mdl-data-table__cell" width="70">
+						<button title="play" data-play="{{@key}}" data-id="{{this.ytid}}" data-start="{{this.start}}" data-end="{{this.end}}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary mdl-button--icon">
+							<i class="material-icons dp48">play_arrow</i>
+						</button>
+					</td>
+					<td class="mdl-data-table__cell--non-numeric">{{@key}}</td>
+					<td class="mdl-data-table__cell--non-numeric" style="white-space: pre;">{{this.ytid}}</td>
+					<td class="mdl-data-table__cell">{{this.start}}</td>
+					<td class="mdl-data-table__cell">{{this.end}}</td>
+					<td class="mdl-data-table__cell" width="70">
+						<a title="edit" href="/sounds/edit/{{this.category}}/{{@key}}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary mdl-button--icon">
+							<i class="material-icons">create</i>
+						</a>
+						<button title="delete" data-delete-sound="{{this.category}}/{{@key}}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red-500 mdl-button--icon">
+							<i class="material-icons">delete</i>
+						</button>
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+	{{/each}}
+</div>
+{{/if}}
+
+<!-- Colored FAB button with ripple -->
+<button title="new clip" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored page-fab" id="add-sound-button"
+ data-dialog="#new-sound-dialog">
+	<i class="material-icons">add</i>
+</button>
+
+
+<div id="ytvideo">
+	<iframe id="video-frame" width="560" height="315" src="about:blank"
+	 frameborder="0" allow="autoplay; encrypted-media"></iframe>
+</div>
+
+
+{{#section 'scripts'}}
+<script src="/assets/scripts/dialog.js"></script>
+<script src="/assets/scripts/play.js"></script>
+{{/section}}
