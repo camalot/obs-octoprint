@@ -9,7 +9,6 @@ if(env.BRANCH_NAME ==~ /master$/) {
 node ("node") {
 	def ProjectName = "obs-octoprint"
 	def slack_notify_channel = null
-	def teamName = "stream-tools"
 	def MAJOR_VERSION = 1
 	def MINOR_VERSION = 0
 
@@ -43,7 +42,7 @@ node ("node") {
 						env.OCTOPRINT_PORT = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_PORT")
 
 						deleteDir()
-						Branch.checkout_vsts(this, teamName, env.CI_PROJECT_NAME)
+						Branch.checkout(this, env.CI_PROJECT_NAME)
 						Pipeline.install(this)
 						Node.createAuthenticationFile(this, env.CI_DOCKER_ORGANIZATION)
 
