@@ -27,7 +27,7 @@ get_opts() {
 
 get_opts "$@";
 
-npm run test;
+#npm run test;
 
 exit 0;
 
