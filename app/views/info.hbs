@@ -1,66 +1,40 @@
-<html>
-
-<head>
-	<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="//code.getmdl.io/1.3.0/material.deep_purple-indigo.min.css">
-	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-	<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-	<link href="//cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css"
-	/>
-	<link rel="stylesheet" type="text/css" href="/assets/dialog-polyfill/dialog-polyfill.css" />
-	<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" type="text/css" />
-	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script defer src="//code.getmdl.io/1.3.0/material.min.js"></script>
-	<script defer src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+ {{#section 'head'}}
+<link rel="stylesheet" href="/assets/css/progress.css" /> {{/section}}
 
 
-	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-	<link rel="manifest" href="/site.webmanifest">
-	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-	<meta name="msapplication-TileColor" content="#da532c">
-	<meta name="theme-color" content="#ffffff">
+<h3 class="info">
+	<span class="mdl-color-text--blue-400 label">State: </span>
+	<span id="print_state"></span>
+</h3>
+<h3 class="info file">
+	<span class="mdl-color-text--blue-400 label">File: </span>
+	<span id="print_file"></span>
+</h3>
+<h3 class="info">
+	<span class="mdl-color-text--blue-400 label">Elapsed Time: </span>
+	<span id="print_elapsed"></span>
+</h3>
+<h3 class="info">
+	<span class="mdl-color-text--blue-400 label">Remaining Time: </span>
+	<span id="print_remaining"></span>
+</h3>
+<h3 class="info">
+	<span class="mdl-color-text--blue-400 label">Hotend: </span>
+	<span class="mdl-color-text--green-400">
+		<span id="tool0_actual"></span>&deg;C</span>
+	<span class="mdl-color-text--blue-400">/</span>
+	<span class="mdl-color-text--red-400">
+		<span id="tool0_target"></span>&deg;C</span>
+</h3>
+<h3 class="info">
+	<span class="mdl-color-text--blue-400 label">Bed: </span>
+	<span class="mdl-color-text--green-400">
+		<span id="bed_actual"></span>&deg;C</span>
+	<span class="mdl-color-text--blue-400">/</span>
+	<span class="mdl-color-text--red-400">
+		<span id="bed_target"></span>&deg;C</span>
+</h3>
 
-	<link rel="stylesheet" href="/assets/css/progress.css" /> {{{block 'head'}}}
 
-</head>
-
-<body>
-	<h3 class="info">
-		<span class="mdl-color-text--blue-400 label">State: </span>
-		<span id="print_state"></span>
-	</h3>
-	<h3 class="info file">
-		<span class="mdl-color-text--blue-400 label">File: </span>
-		<span id="print_file"></span>
-	</h3>
-	<h3 class="info">
-		<span class="mdl-color-text--blue-400 label">Elapsed Time: </span>
-		<span id="print_elapsed"></span>
-	</h3>
-	<h3 class="info">
-		<span class="mdl-color-text--blue-400 label">Remaining Time: </span>
-		<span id="print_remaining"></span>
-	</h3>
-	<h3 class="info">
-		<span class="mdl-color-text--blue-400 label">Hotend: </span>
-		<span class="mdl-color-text--green-400">
-			<span id="tool0_actual"></span>&deg;C</span>
-		<span class="mdl-color-text--blue-400">/</span>
-		<span class="mdl-color-text--red-400">
-			<span id="tool0_target"></span>&deg;C</span>
-	</h3>
-	<h3 class="info">
-		<span class="mdl-color-text--blue-400 label">Bed: </span>
-		<span class="mdl-color-text--green-400">
-			<span id="bed_actual"></span>&deg;C</span>
-		<span class="mdl-color-text--blue-400">/</span>
-		<span class="mdl-color-text--red-400">
-			<span id="bed_target"></span>&deg;C</span>
-	</h3>
-	<script src="/assets/scripts/info.js"></script>
-</body>
-
-</html>
+{{#section 'head'}}
+<script src="/assets/scripts/info.js"></script> {{/section}}

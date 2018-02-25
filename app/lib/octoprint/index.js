@@ -4,13 +4,12 @@ class OctoPrintServer {
 	constructor(settings) {
 		this.address = settings.address;
 		this.APIKey = settings.APIKey;
-		this.version = settings.version;
 	}
 	getEndpoint(path, qs) {
-		var self = this;
-		return new Promise(function(resolve, reject) {
-			var url = self.address + path;
-			var options = {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			let url = self.address + path;
+			let options = {
 				method: "GET",
 				url: url,
 				headers: {
@@ -21,13 +20,35 @@ class OctoPrintServer {
 			};
 
 			request(options)
-				.then(function(body) {
+				.then((body) => {
 					return resolve(body);
 				})
-				.catch(function(err) {
+				.catch((err) => {
 					return reject(err);
 				});
 		});
 	}
+	printerStatus() {
+		let self = this;
+		return new Promise ((resolve, reject) => {
+			let path = "/api/printer";
+			self.getEndpoint(path).then( (body) => {
+				return resolve(body);
+			}).catch( (err) => {
+				return reject(err);
+			});
+		});
+	}
+	jobStatus() {
+		let self = this;
+		return new Promise( (resolve, reject) => {
+			let path = "/api/job";
+			self.getEndpoint(path).then((body) => {
+				return resolve(body);
+			}).catch((err) => {
+				return reject(err);
+			});
+		});
+	}
 }
-module.exports = {};
+module.exports = OctoPrintServer;

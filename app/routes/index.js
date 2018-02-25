@@ -20,7 +20,7 @@ let _processPath = p => {
 					file !== "config.js" &&
 					!configMatch.test(file)
 				) {
-					var name = file.substring(0, file.lastIndexOf("."));
+					let name = file.substring(0, file.lastIndexOf("."));
 					let p1 = deepPath.length > 0 ? `${deepPath}/` : "";
 					// console.log(`${p1}${name}`);
 					libs[`${p1}${name}`] = require(`./${p1}${name}`);
@@ -47,7 +47,7 @@ module.exports = (app, passport) => {
 			//console.error(ex);
 		}
 		if (typeof troute === typeof []) {
-			for (var i = 0; i < troute.length; i++) {
+			for (let i = 0; i < troute.length; i++) {
 				console.log(troute[i]);
 				app.use(troute[i], libs[item]);
 			}

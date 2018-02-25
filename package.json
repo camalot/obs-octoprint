@@ -28,7 +28,6 @@
     "mdi": "^2.1.19",
     "merge": "^1.2.0",
     "morgan": "^1.9.0",
-    "octoprint": "0.0.4",
     "passport": "^0.4.0",
     "passport-github2": "^0.1.11",
     "promise": "^8.0.1",
