@@ -1,0 +1,73 @@
+#!groovy
+import com.bit13.jenkins.*
+
+def ProjectName = "obs-octoprint"
+def slack_notify_channel = null
+
+def SONARQUBE_INSTANCE = "bit13"
+
+def MAJOR_VERSION = 1
+def MINOR_VERSION = 0
+
+properties ([
+  buildDiscarder(logRotator(numToKeepStr: '25', artifactNumToKeepStr: '25')),
+	disableConcurrentBuilds(),
+	[$class: 'ParametersDefinitionProperty',
+		parameterDefinitions: [
+			[
+				$class: 'StringParameterDefinition',
+				name: 'DeployTag',
+				defaultValue: null,
+				description: 'Docker Tag to deploy (default: latest)'
+			]
+		]
+	]
+])
+
+
+node ("docker") {
+	env.PROJECT_MAJOR_VERSION = MAJOR_VERSION
+	env.PROJECT_MINOR_VERSION = MINOR_VERSION
+
+	env.CI_PROJECT_NAME = "${ProjectName}"
+	env.CI_DOCKER_ORGANIZATION = Accounts.GIT_ORGANIZATION
+	env.CI_DEPLOYMENT_VERSION_TAG = "latest"
+	currentBuild.result = "SUCCESS"
+	def errorMessage = null
+
+	if(env.BRANCH_NAME ==~ /master$/) {
+			return
+	}
+	if ( params.DeployTag != null && params.DeployTag != '' ) {
+		env.CI_DEPLOYMENT_VERSION_TAG = params.DeployTag
+	}
+	env.CI_BUILD_VERSION = env.CI_DEPLOYMENT_VERSION_TAG
+
+	wrap([$class: 'TimestamperBuildWrapper']) {
+		wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+			Notify.slack(this, "STARTED", null, slack_notify_channel)
+			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_ARTIFACTORY_CREDENTIAL_ID,
+					usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
+				try {
+					stage ("install") {
+						Branch.checkout(this, env.CI_PROJECT_NAME)
+						Pipeline.install(this)
+					}
+					stage ("test") {
+						sh script:  "${WORKSPACE}/.deploy/validate.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+					}
+					stage ("deploy") {
+						sh script:  "${WORKSPACE}/.deploy/run.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}' -f"
+					}
+				} catch(err) {
+					currentBuild.result = "FAILURE"
+					errorMessage = err.message
+					throw err
+				}
+				finally {
+					Pipeline.finish(this, currentBuild.result, errorMessage)
+				}
+			}
+		}
+	}
+}
