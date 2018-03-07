@@ -50,6 +50,10 @@ node ("docker") {
 					usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
 				try {
 					stage ("install") {
+						env.OCTOPRINT_API_KEY = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_API_KEY")
+						env.OCTOPRINT_HOST = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_HOST")
+						env.OCTOPRINT_PORT = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_PORT")
+
 						Branch.checkout(this, env.CI_PROJECT_NAME)
 						Pipeline.install(this)
 					}
