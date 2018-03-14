@@ -40,17 +40,26 @@ WORKDIR="${WORKSPACE:-"${pwd}"}";
 [[ -z "${BUILD_ORG// }" ]] && __error "Argument '-o' (organization) is missing or empty.";
 [[ -z "${BUILD_PUSH_REGISTRY// }" ]] && __error "Environment variable 'DOCKER_REGISTRY' missing or empty.";
 
-docker login --username "${ARTIFACTORY_USERNAME}" "${BUILD_PUSH_REGISTRY}" --password-stdin <<< "${ARTIFACTORY_PASSWORD}";
 
 tag="${BUILD_ORG}/${BUILD_PROJECT}";
 tag_name_latest="${tag}:latest";
 tag_name_ver="${tag}:${BUILD_VERSION}";
 
+# Artifactory Push
+docker login --username "${ARTIFACTORY_USERNAME}" "${BUILD_PUSH_REGISTRY}" --password-stdin <<< "${ARTIFACTORY_PASSWORD}";
 # This will NOT push `tag:latest` if the build version is `1.0.0-snapshot`. It will still push the `1.0.0-snapshot` build.
 [[ ! $BUILD_VERSION =~ -snapshot$ ]] && \
 	docker push "${BUILD_PUSH_REGISTRY}/${tag_name_latest}";
 
 docker push "${BUILD_PUSH_REGISTRY}/${tag_name_ver}";
+
+
+# Docker Push
+docker login --username "${DOCKER_HUB_USERNAME}" --password-stdin <<< "${DOCKER_HUB_PASSWORD}";
+# Only push "non-snapshots" to docker hub
+[[ ! $BUILD_VERSION =~ -snapshot$ ]] && \
+	docker push "${tag_name_latest}" && \
+	docker push "${tag_name_ver}";
 
 unset BUILD_PROJECT;
 unset BUILD_PUSH_REGISTRY;

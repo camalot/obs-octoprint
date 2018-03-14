@@ -34,39 +34,43 @@ node ("node") {
 		wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
 			Notify.slack(this, "STARTED", null, slack_notify_channel)
 			try {
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_ARTIFACTORY_CREDENTIAL_ID,
-												usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
-					stage ("install" ) {
-						env.OCTOPRINT_API_KEY = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_API_KEY")
-						env.OCTOPRINT_HOST = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_HOST")
-						env.OCTOPRINT_PORT = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_PORT")
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_DOCKER_HUB_CREDENTIAL_ID,
+								usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
 
-						deleteDir()
-						Branch.checkout(this, env.CI_PROJECT_NAME)
-						Pipeline.install(this)
-						Node.createAuthenticationFile(this, env.CI_DOCKER_ORGANIZATION)
+					withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_ARTIFACTORY_CREDENTIAL_ID,
+													usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
+						stage ("install" ) {
+							env.OCTOPRINT_API_KEY = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_API_KEY")
+							env.OCTOPRINT_HOST = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_HOST")
+							env.OCTOPRINT_PORT = SecretsVault.get(this, "secret/${env.CI_PROJECT_NAME}", "OCTOPRINT_PORT")
 
-					}
-					stage ("lint") {
-						sh script: "${WORKSPACE}/.deploy/lint.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
-					}
-					stage ("build") {
-						sh script: "${WORKSPACE}/.deploy/build.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
-					}
-					stage ("test") {
-						sh script: "${WORKSPACE}/.deploy/test.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
-					}
-					stage ("deploy") {
-						sh script: "${WORKSPACE}/.deploy/deploy.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
-					}
-					stage ('publish') {
-						sh script:  "${WORKSPACE}/.deploy/validate.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+							deleteDir()
+							Branch.checkout(this, env.CI_PROJECT_NAME)
+							Pipeline.install(this)
+							Node.createAuthenticationFile(this, env.CI_DOCKER_ORGANIZATION)
 
-						Branch.publish_to_master(this)
-						Pipeline.publish_buildInfo(this)
-					}
-					stage ('run') {
-						sh script:  "${WORKSPACE}/.deploy/run.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}' -f"
+						}
+						stage ("lint") {
+							sh script: "${WORKSPACE}/.deploy/lint.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+						}
+						stage ("build") {
+							sh script: "${WORKSPACE}/.deploy/build.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+						}
+						stage ("test") {
+							sh script: "${WORKSPACE}/.deploy/test.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+						}
+						stage ("deploy") {
+							sh script: "${WORKSPACE}/.deploy/deploy.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+						}
+						stage ('publish') {
+							sh script:  "${WORKSPACE}/.deploy/validate.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+
+							Branch.publish_to_master(this)
+							Pipeline.publish_buildInfo(this)
+						}
+						stage ('run') {
+							sh script:  "${WORKSPACE}/.deploy/run.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}' -f"
+						}
 					}
 				}
 			} catch(err) {
