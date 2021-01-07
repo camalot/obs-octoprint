@@ -29,8 +29,12 @@ $(function() {
 					$("#print_elapsed").html(duration_elapsed);
 					$("#tool0_actual").html(data.printer.temperature.tool0.actual);
 					$("#tool0_target").html(data.printer.temperature.tool0.target);
-					$("#bed_actual").html(data.printer.temperature.bed.actual);
-					$("#bed_target").html(data.printer.temperature.bed.target);
+					if (typeof(data.printer.temperature.bed) != 'undefined') {
+						$("#bed_actual").html(data.printer.temperature.bed.actual);
+						$("#bed_target").html(data.printer.temperature.bed.target);
+					} else {
+						$("#bed").addClass("hidden")
+					}
 
 					if(data.status.job.file && data.status.job.file.name) {
 						$(".file").removeClass("hidden");
